@@ -33,22 +33,21 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  int j = 0;
-  size_t x = 0;
+  int offset = 0;
+  size_t rest = 0;
 
   if (readen_bytes % N == 0) {
-    x = readen_bytes;
+    rest = readen_bytes;
   } else {
-    x = readen_bytes % N;
+    rest = readen_bytes % N;
   }
 
   size_t i = 0;
-
   while (i < readen_bytes) {
 
     if ((i % N) == 0) {
-      printf("| %08X |   ", j);
-      j += N;
+      printf("| %08X |   ", offset);
+      offset += N;
     }
 
     printf("%02X ", file[i]);
@@ -62,11 +61,10 @@ int main(int argc, char **argv) {
     i++;
   }
 
-  if (x < readen_bytes) {
-    int spaces = ((N - x) * 3) + 3;
-    i -= x;
+  if (rest < readen_bytes) {
+    int spaces = ((N - rest) * 3) + 3;
     print_spaces(spaces);
-    print_ascii(file, i, i + x);
+    print_ascii(file, i - rest, i);
   }
 
   return 0;
