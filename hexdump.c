@@ -36,10 +36,10 @@ int main(int argc, char **argv) {
   int j = 0;
   size_t x = 0;
 
-  if (readen_bytes % 16 == 0) {
+  if (readen_bytes % N == 0) {
     x = readen_bytes;
   } else {
-    x = readen_bytes % 16;
+    x = readen_bytes % N;
   }
 
   size_t i = 0;
