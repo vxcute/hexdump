@@ -21,6 +21,7 @@ u8 *read_file(string filename, long *readen_bytes) {
   if (!file)
     return NULL;
 
+
   long file_size = get_file_size(file);
   u8 *buf = malloc(file_size);
   if (!buf)
