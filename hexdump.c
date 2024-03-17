@@ -17,23 +17,35 @@ void print_spaces(size_t n);
 void print_ascii(u8 *bytes, size_t start, size_t end);
 
 u8 *read_file(string filename, long *readen_bytes) {
-  FILE *file = fopen(filename, "rb");
+  FILE *file;
+  u8 *buf;
+
+  file = fopen(filename, "rb");
   if (!file)
-    return NULL;
+    goto error;
 
   long file_size = get_file_size(file);
-  u8 *buf = malloc(file_size);
+  buf = malloc(file_size);
   if (!buf)
-    return NULL;
+    goto error;
 
   memset(buf, 0, file_size);
 
   size_t bytes_read = fread(buf, 1, file_size, file);
   if (bytes_read < file_size)
-    return NULL;
-  *readen_bytes = bytes_read;
+    goto error;
 
+  *readen_bytes = bytes_read;
   return buf;
+
+error:
+  if (file)
+    fclose(file);
+
+  if (buf)
+    free(buf);
+
+  return NULL;
 }
 
 long get_file_size(FILE *file) {
@@ -66,12 +78,12 @@ void print_ascii(u8 *bytes, size_t start, size_t end) {
 }
 
 int main(int argc, char **argv) {
-  
-  if(argc < 2) {
+
+  if (argc < 2) {
     fprintf(stderr, "Usage:\n  %s <file>\n", argv[0]);
     exit(-1);
   }
-  
+
   long readen_bytes = 0;
   u8 *file = read_file(argv[1], &readen_bytes);
   if (!file) {
